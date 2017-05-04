@@ -1,0 +1,433 @@
+const waveTimerInterval = 30;
+const wavesMax = 50;
+const frameTime = 1000.0 / 30.0;
+
+var waveTimer = 0;
+
+var stage, waves, earth, atmosphere;
+
+Array.prototype.move = function(old_index, new_index) {
+    if (new_index >= this.length) {
+        var k = new_index - this.length;
+        while ((k--) + 1) {
+            this.push(undefined);
+        }
+    }
+    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
+    return this; // for testing purposes
+};
+
+class GameObject {
+    constructor() {
+        this._delete = false;
+    }
+
+    update() {
+        if (this._delete)
+            return 1;
+        return 0;
+    }
+
+    deconstruct() {
+        this.delete();
+    }
+
+    delete() {
+        this._delete = true;
+    }
+}
+
+class EarthObject extends GameObject {
+    static preinit() {
+        this.earthNormalSheet = new createjs.SpriteSheet($.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "../../img/demogreenhouse/earth_normal.json",
+            async: false
+        }).responseJSON);
+
+        this.earthFloodedSheet = new createjs.SpriteSheet($.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "../../img/demogreenhouse/earth_flooded.json",
+            async: false
+        }).responseJSON);
+
+        this.earthFrozenSheet = new createjs.SpriteSheet($.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "../../img/demogreenhouse/earth_frozen.json",
+            async: false
+        }).responseJSON);
+    }
+
+    constructor(x, y) {
+        super();
+
+        let r = 100;
+
+        this.circle = new createjs.Shape();
+        this.circle.graphics.beginFill("black")
+            .drawCircle(0, 0, r);
+        this.circle.x = x;
+        this.circle.y = y;
+        this.circle.visible = false;
+        stage.addChild(this.circle);
+
+        // --------------------------------------------------------------------
+
+        this.earthNormal = new createjs.Sprite(EarthObject.earthNormalSheet, "spin");
+        this.earthNormal.x = x;
+        this.earthNormal.y = y;
+        this.earthNormal.regX = r;
+        this.earthNormal.regY = r;
+        stage.addChild(this.earthNormal);
+
+        // --------------------------------------------------------------------
+
+        this.earthFlooded = new createjs.Sprite(EarthObject.earthFloodedSheet, "spin");
+        this.earthFlooded.x = x;
+        this.earthFlooded.y = y;
+        this.earthFlooded.regX = r;
+        this.earthFlooded.regY = r;
+        this.earthFlooded.alpha = 1;
+        stage.addChild(this.earthFlooded);
+
+        // --------------------------------------------------------------------
+
+        this.earthFrozen = new createjs.Sprite(EarthObject.earthFrozenSheet, "spin");
+        this.earthFrozen.x = x;
+        this.earthFrozen.y = y;
+        this.earthFrozen.regX = r;
+        this.earthFrozen.regY = r;
+        this.earthFrozen.alpha = 1;
+        stage.addChild(this.earthFrozen);
+
+        // --------------------------------------------------------------------
+
+
+        this.absorbed = 0;
+
+        this.$longwaves = $("#lwEarth");
+    }
+
+    update() {
+        if (super.update()) return;
+
+        let energy = Math.min(1, (this.absorbed - 5) / 23);
+        let frozenMax = 0.2;
+        let floodedMin = 0.8;
+
+        let floodedAlpha = (energy - floodedMin) / (1 - floodedMin);
+        let frozenAlpha = (frozenMax - energy) / frozenMax;
+
+        if (this.earthFlooded.alpha != floodedAlpha)
+            this.earthFlooded.alpha += this.earthFlooded.alpha < floodedAlpha ? 0.01 : -0.01;
+
+        if (this.earthFrozen.alpha != frozenAlpha)
+            this.earthFrozen.alpha += this.earthFrozen.alpha < frozenAlpha ? 0.01 : -0.01;
+
+        this.$longwaves.text(this.absorbed);
+    }
+
+    collisionTest(wave) {
+        let [x, y] = [wave.x, wave.y]
+
+        let ptEdge = this.circle.globalToLocal(x, y);
+        let hitEdge = this.circle.hitTest(ptEdge.x, ptEdge.y);
+
+        return hitEdge;
+    }
+}
+
+class AtmosphereObject extends GameObject {
+    constructor(x, y, r) {
+        super();
+
+        this.strokeLength = (2 * Math.PI * r) / 20;
+
+        // --------------------------------------------------------------------
+
+        let strokeWidth = 4;
+
+        this.circleEdge = new createjs.Shape();
+        this.circleEdge.graphics.setStrokeStyle(strokeWidth)
+            .beginStroke("black")
+            .drawCircle(0, 0, r);
+        this.circleEdge.x = x;
+        this.circleEdge.y = y;
+        this.circleEdge.visible = false;
+
+        stage.addChild(this.circleEdge);
+
+        // --------------------------------------------------------------------
+
+        this.circleVisible = new createjs.Shape();
+        this.circleVisible.graphics.setStrokeStyle(strokeWidth)
+            .beginStroke("white")
+        this.strokeDashCmd = this.circleVisible.graphics.setStrokeDash([20, 15]).command;
+        this.circleVisible.graphics.drawCircle(0, 0, r);
+
+        this.circleVisible.x = x;
+        this.circleVisible.y = y;
+
+        // let cacheRadius = r + (strokeWidth / 2) + 2;
+
+        // this.circleVisible.cache(-cacheRadius, -cacheRadius,
+        //     cacheRadius * 2,
+        //     cacheRadius * 2
+        // );
+
+        stage.addChild(this.circleVisible);
+
+        // --------------------------------------------------------------------
+
+        this.circleWhole = new createjs.Shape();
+        this.circleWhole.graphics.beginFill("black")
+            .drawCircle(x, y, r);
+        this.circleWhole.visible = false;
+        stage.addChild(this.circleWhole);
+
+        // --------------------------------------------------------------------
+
+        this.density = 0.75;
+        $("#density").on("change", (e) => { this.density = e.value.newValue });
+        this.$longwaves = $("#lwAtmosphere");
+
+        // --------------------------------------------------------------------
+
+        this.longwavesInside = 0;
+        this.residenceTimeTotal = 0;
+        this.residenceTimeCount = 0.0;
+    }
+
+    update() {
+        if (super.update()) return;
+
+        this.strokeDashCmd.offset += 0.25;
+        this.strokeDashCmd.segments = [
+            this.density * this.strokeLength,
+            (1 - this.density) * this.strokeLength
+        ];
+
+        this.$longwaves.text(this.longwavesInside);
+        this.longwavesInside = 0;
+    }
+
+    collisionTest(wave) {
+        let [x, y] = [wave.x, wave.y]
+
+        let ptWhole = this.circleWhole.globalToLocal(x, y);
+        let longwaveInside = this.circleWhole.hitTest(ptWhole.x, ptWhole.y);
+        this.longwavesInside += longwaveInside;
+
+        let ptEdge = this.circleEdge.globalToLocal(x, y);
+        return this.circleEdge.hitTest(ptEdge.x, ptEdge.y);
+
+    }
+}
+
+
+class WaveObject extends GameObject {
+    constructor(x, y, angle, amplitude, speed) {
+        super();
+
+        this.x = x || 520;
+        this.y = y || Math.random() * stage.canvas.height;
+
+        this.xPrev = undefined;
+        this.yPrev = undefined;
+
+        this.velocity = 1.5;
+        this.angle = angle || (Math.PI / 180) * (160 + (Math.random() * 40));
+
+        this.waveAngle = 0;
+        this.waveSpeed = speed || (Math.PI / 180) * 20;
+        this.waveAmplitude = amplitude || 0.75;
+
+        this.timer = 0;
+        this.timerMax = 2;
+
+        this.color = "#FF9800";
+        this.alpha = 1;
+
+        this.circles = [];
+        this.circlesMax = 20;
+        this.circlesSize = 4;
+        this.circlesIndex = 0;
+
+        for (let i = 0; i < this.circlesMax; i++) {
+            let circle = new createjs.Shape();
+            circle.color = this.color;
+
+            circle.graphics.beginFill(this.color);
+            circle.graphics.drawCircle(0, 0, this.circlesSize);
+            circle.cache(-this.circlesSize, -this.circlesSize,
+                this.circlesSize * 2,
+                this.circlesSize * 2
+            );
+            circle.alpha = 0;
+            stage.addChild(circle);
+            this.circles.push(circle);
+        }
+
+        this.oobTimer = 0;
+        this.oobTimerMax = 120;
+
+        this.isLongwave = false;
+    }
+
+    absorb() {
+        this.alpha = 0;
+        this.color = "#c62828";
+        this.absorbedTimer = 30 + (Math.random() * 60);
+        this.isLongwave = true;
+        earth.absorbed++;
+    }
+
+    unabsorb() {
+        this.alpha = 1;
+        earth.absorbed--;
+    }
+
+    bounce() {
+        this.angle += (Math.PI / 180) * 45;
+        this.waveSpeed = (Math.PI / 180) * 4;
+    }
+
+    isOOB() {
+        let oobX = (this.x >= stage.canvas.width) || (this.x <= 0);
+        let oobY = (this.y >= stage.canvas.height) || (this.y <= 0);
+
+        let oobStuck = (
+            (Math.abs(this.x - this.xPrev) < 1) &&
+            (Math.abs(this.y - this.yPrev) < 1)
+        );
+
+        return oobX || oobY || oobStuck;
+    }
+
+    update() {
+        if (super.update()) return;
+
+        // --------------------------------------------------------------------
+        // Move circle
+        // --------------------------------------------------------------------		
+
+        let circle = this.circles[this.circlesIndex];
+
+        if (circle.color != this.color) {
+            circle.color = this.color;
+            circle.graphics.clear()
+                .beginFill(this.color)
+                .drawCircle(0, 0, this.circlesSize);
+            circle.updateCache();
+        }
+
+        circle.alpha = this.alpha;
+
+        this.circlesIndex++;
+        this.circlesIndex %= this.circlesMax;
+
+        circle.x = this.x;
+        circle.y = this.y;
+
+        // --------------------------------------------------------------------
+        // Absorption
+        // --------------------------------------------------------------------
+
+        if (this.absorbedTimer > 0) {
+            if (--this.absorbedTimer <= 0)
+                this.unabsorb();
+            return;
+        }
+
+        // --------------------------------------------------------------------
+        // New pos
+        // --------------------------------------------------------------------
+
+        let waveInfluence = Math.sin(this.waveAngle) * this.waveAmplitude;
+
+        let vx = this.velocity * Math.cos(this.angle + waveInfluence);
+        let vy = this.velocity * Math.sin(this.angle + waveInfluence);
+
+        this.x += vx;
+        this.y += vy;
+
+        this.waveAngle += this.waveSpeed;
+
+        // --------------------------------------------------------------------
+        // OOB
+        // --------------------------------------------------------------------
+
+        if (this.isOOB()) {
+            if (++this.oobTimer >= this.oobTimerMax)
+                this.deconstruct();
+        } else this.oobTimer = 0;
+
+        this.xPrev = this.x;
+        this.yPrev = this.y;
+
+        // --------------------------------------------------------------------
+        // Collision
+        // --------------------------------------------------------------------
+
+        if (earth.collisionTest(this)) {
+            this.bounce();
+            if (Math.random() > 0.31) this.absorb();
+        }
+
+        if (this.isLongwave)
+            if (atmosphere.collisionTest(this))
+                if (Math.random() < atmosphere.density)
+                    this.angle += (Math.PI / 180) * 45;
+    }
+
+    deconstruct() {
+        super.deconstruct();
+
+        this.circles.forEach(function(obj, i, arr) {
+            stage.removeChild(obj);
+            delete arr[i];
+        });
+    }
+}
+
+function update(event) {
+    waves.forEach(function(wave, i, arr) {
+        if (wave._delete) {
+            delete arr[i];
+        } else wave.update();
+    });
+    atmosphere.update();
+    earth.update();
+    stage.update(event);
+
+    if (!(++waveTimer % waveTimerInterval)) {
+        if (waves.length < wavesMax) waves.push(new WaveObject());
+        else {
+            for (let i = 0; i < waves.length; i++) {
+                if (typeof waves[i] == "undefined") {
+                    waves[i] = new WaveObject();
+                    break;
+                }
+            }
+        }
+    }
+}
+
+function init() {
+    stage = new createjs.Stage("demoCanvas");
+    EarthObject.preinit();
+    earth = new EarthObject(250, 250);
+    atmosphere = new AtmosphereObject(250, 250, 150);
+    waves = [];
+
+    createjs.Ticker.framerate = 50;
+
+    createjs.Ticker.addEventListener("tick", function(event) {
+        update(event);
+    });
+}
+
+$(document).ready(init);
