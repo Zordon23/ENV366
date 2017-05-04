@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{{TITLE}} - Greenhouse Gas Demo</title>
+    <!--include head-->
+</head>
+
+<body>
+    <!--include nav-->
+
+    <div id="demogreenhouse">
+        <div id="topCont">
+            <div>
+                <div id="demoCont">
+                    <canvas id="demoCanvas" width="500" height="500"></canvas>
+                    <img id="demoSun" src="../../img/demogreenhouse/sun.png" />
+                </div>
+                <h2>Atmosphere Density</h2>
+                <input id="density" type="text" name="density" data-provide="slider" data-slider-ticks="[0, 0.75, 1]" data-slider-ticks-labels='["No Atmosphere", "", "100% Trapping"]' data-slider-min="0" data-slider-min="1" data-slider-step="0.05" data-slider-value="0.75">
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <h1>Explanation</h1>
+                    This demo is meant to visually represent how the energy emitted from the Sun interacts with the Earth and its atmosphere.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--include footer-->
+
+    <!--include scripts-->
+
+    <script src="../../js/demogreenhouse/main.js"></script>
+</body>
+
+</html>

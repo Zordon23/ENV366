@@ -1,0 +1,79 @@
+$color-primary: #35424a;
+$color-accent: #e8491d;
+html,
+body {
+    min-height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+@import "./fonts";
+@import "./lib/bootstrap.min";
+@import "./lib/theme";
+@import "./lib/bootstrap-slider.min";
+@import "demogreenhouse";
+@import "./navbar";
+#footer {
+    position: relative;
+    padding: 48px;
+    width: 100%;
+    background: $color-primary;
+    color: #fff;
+}
+
+article {
+    margin-bottom: 32px;
+}
+
+#sidebar {
+    color: #fff;
+    padding: 32px 16px;
+    background: $color-accent;
+    & a {
+        color: #fff;
+    }
+}
+
+#sidebar-bg {
+    position: fixed;
+    background: $color-accent;
+    margin-left: -24px;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    z-index: -1;
+}
+
+.all-center {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#title {
+    width: 100%;
+    height: 85vh;
+    background-image: url("/img/home/bg.png");
+    background-size: cover;
+    background-color: $color-primary;
+    color: #fff;
+    position: relative;
+    border-bottom: 4px solid $color-accent;
+}
+
+body.has-title {
+    padding-top: 0;
+}
+
+#content {
+    padding: 16px 42px;
+}
+
+.posts {
+    margin-top: 32px;
+    h1 {
+        margin-top: 0;
+    }
+}

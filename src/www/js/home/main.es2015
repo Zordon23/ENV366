@@ -1,0 +1,14 @@
+var $body = $("body");
+var $title = $("#title");
+var $navbar = $("#navbar");
+var navbarHeight = $navbar.height();
+
+function navbarTitle() {
+    let atTitle = ($body.scrollTop() > ($title.height() - navbarHeight));
+    $navbar[atTitle ? "removeClass" : "addClass"]("navbar-title");
+}
+
+$(document).ready(function() {
+    navbarTitle();
+    $(window).on("scroll", navbarTitle);
+});

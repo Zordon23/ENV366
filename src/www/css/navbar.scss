@@ -1,0 +1,27 @@
+$navbar-height: 64px;
+body {
+    padding-top: $navbar-height;
+}
+
+.navbar-brand {
+    font-family: 'chantilly-extraboldregular';
+}
+
+#navbar.navbar-title {
+    border-bottom: none;
+    background-color: transparent;
+    & .navbar-brand {
+        display: none;
+    }
+}
+
+#navbar-shadow {
+    height: 16px;
+    width: 100%;
+    position: absolute;
+    top: $navbar-height;
+    z-index: -2;
+    background-image: url("/img/navbar-shadow.png");
+    background-repeat: repeat-x;
+    background-size: 1px 16px;
+}
