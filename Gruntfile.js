@@ -54,6 +54,9 @@ module.exports = function(grunt) {
             from: "<!--include scripts-->",
             to: fs.readFileSync(WWW_SRC + "templates/scripts.html", "utf8")
         }, {
+            from: "<!--include sidebar_normal-->",
+            to: fs.readFileSync(WWW_SRC + "templates/sidebar_normal.html", "utf8")
+        }, {
             from: "{{TITLE}}",
             to: TITLE
         }, {

@@ -171,13 +171,6 @@ class AtmosphereObject extends GameObject {
         this.circleVisible.x = x;
         this.circleVisible.y = y;
 
-        // let cacheRadius = r + (strokeWidth / 2) + 2;
-
-        // this.circleVisible.cache(-cacheRadius, -cacheRadius,
-        //     cacheRadius * 2,
-        //     cacheRadius * 2
-        // );
-
         stage.addChild(this.circleVisible);
 
         // --------------------------------------------------------------------
@@ -223,7 +216,6 @@ class AtmosphereObject extends GameObject {
 
         let ptEdge = this.circleEdge.globalToLocal(x, y);
         return this.circleEdge.hitTest(ptEdge.x, ptEdge.y);
-
     }
 }
 
@@ -248,7 +240,7 @@ class WaveObject extends GameObject {
         this.timer = 0;
         this.timerMax = 2;
 
-        this.color = "#FF9800";
+        this.color = "#e8491d";
         this.alpha = 1;
 
         this.circles = [];
