@@ -25,3 +25,9 @@ body {
     background-repeat: repeat-x;
     background-size: 1px 16px;
 }
+
+.navbar-collapse {
+    &.collapsing, &.collapse.in {
+        background-color: $color-primary;
+    }
+}

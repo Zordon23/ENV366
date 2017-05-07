@@ -366,13 +366,14 @@ class WaveObject extends GameObject {
 
         if (earth.collisionTest(this)) {
             this.bounce();
-            if (Math.random() > 0.31) this.absorb();
+            if (Math.random() > 0.30) this.absorb();
         }
 
-        if (this.isLongwave)
-            if (atmosphere.collisionTest(this))
-                if (Math.random() < atmosphere.density)
-                    this.angle += (Math.PI / 180) * 45;
+        if (atmosphere.collisionTest(this)) {
+            let chance = this.isLongwave ? atmosphere.density : 0.05;
+            if (Math.random() < chance)
+                this.angle += (Math.PI / 180) * 45;
+        }
     }
 
     deconstruct() {

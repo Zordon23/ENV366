@@ -11,4 +11,5 @@ function navbarTitle() {
 $(document).ready(function() {
     navbarTitle();
     $(window).on("scroll", navbarTitle);
+    $(window).on("resize", navbarTitle);    
 });

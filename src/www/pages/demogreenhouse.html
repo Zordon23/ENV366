@@ -14,9 +14,9 @@
             <div>
                 <div id="demoCont">
                     <canvas id="demoCanvas" width="500" height="500"></canvas>
-                    <img id="demoSun" src="../../img/demogreenhouse/sun.png" />
+                    <img id="demoSun" src="/img/demogreenhouse/sun.png" />
                 </div>
-                <h2>Atmosphere Density</h2>
+                <h2>Greenhouse Gas Density</h2>
                 <input id="density" type="text" name="density" data-provide="slider" data-slider-ticks="[0, 0.75, 1]" data-slider-ticks-labels='["No Atmosphere", "", "100% Trapping"]' data-slider-min="0" data-slider-min="1" data-slider-step="0.05" data-slider-value="0.75">
             </div>
         </div>
@@ -24,8 +24,41 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-9">
-                    <h1>Explanation</h1>
-                    This demo is meant to visually represent how the energy emitted from the Sun interacts with the Earth and its atmosphere.
+                    <h1>The Greenhouse Effect</h1>
+                    <p>The Earth and its atmosphere absorb shortwave radiation (light) from the Sun and re-emit it in every direction as longwave radiation, or infrared.</p>
+                    <img class="img-responsive" src="/img/demogreenhouse/diagram1.jpg"><br>
+                    <blockquote>
+                        <p>Certain gases in the atmosphere block heat from escaping. Long-lived gases that remain semi-permanently in the atmosphere and do not respond physically or chemically to changes in temperature are described as "forcing" climate change. Gases, such as water vapor, which respond physically or chemically to changes in temperature are seen as "feedbacks."</p>
+                        <footer>NASA  <cite><a href="https://climate.nasa.gov/causes/">(Source)</a></cite></footer>
+                    </blockquote>
+                    <p>Gases that contribute to the greenhouse effect include:</p>
+                    <ul>
+                        <li><b>Water Vapor:</b> The most abundant greenhouse gas, but importantly, it acts as a feedback to the climate. Water vapor increases as the Earth's atmosphere warms, but so does the possibility of clouds and precipitation, making these some of the most important feedback mechanisms to the greenhouse effect.</li>
+                        <li><b>Chloroflurocarbons (CFCs):</b> Synthetic compounds entirely of industrial origin used in a number of applications, but now largely regulated in production and release to the atmosphere by international agreement for their ability to contribute to destruction of the ozone layer. They are also greenhouse gases.</li>
+                        <li><b>Nitrous oxide:</b> A powerful greenhouse gas produced by soil cultivation practices, especially the use of commercial and organic fertilizers, fossil fuel combustion, nitric acid production, and biomass burning.</li>
+                        <li><b>Carbon dioxide (CO2):</b> A minor but very important component of the atmosphere, carbon dioxide is released through natural processes such as respiration and volcano eruptions and through human activities such as deforestation, land use changes, and burning fossil fuels. Humans have increased atmospheric CO2 concentration by more than a third since the Industrial Revolution began. This is the most important long-lived "forcing" of climate change.</li>
+                        <li><b>Methane:</b> A hydrocarbon gas produced both through natural sources and human activities, including the decomposition of wastes in landfills, agriculture, and especially rice cultivation, as well as ruminant digestion and manure management associated with domestic livestock. On a molecule-for-molecule basis, methane is a far more active greenhouse gas than carbon dioxide, but also one which is much less abundant in the atmosphere.</li>
+                    </ul>
+                    <img class="img-responsive" src="/img/demogreenhouse/diagram2.png">               
+                    <h1>Demo Explanation</h1>
+                    <p>This demo is meant to visually represent how the energy emitted from the Sun interacts with the Earth and its atmosphere.</p>
+                    <p>Shortwave electromagnetic radiation, also known as “light”, is emitted by the sun and travels towards the Earth. Due to the special properties of greenhouse gasses, shortwave radiation is able to pass through the atmosphere, nearly as though it wasn’t even there. However, once the radiation hits the Earth, it is absorbed and converted into heat.</p>
+                    <p>After being stored for some period of time by the Earth, the energy is released as something known as longwave/infrared radiation. As this type of radiation attempts to escape the atmosphere, it is sometimes bumped around and reflected back to Earth, where it is then absorbed as heat once again.</p>
+                    <p>The amount of greenhouse gasses in the atmosphere increase the chance of this reflection happening, which in turn increases the chance that the Earth will warm up. This is the driving force behind the greenhouse effect.</p>
+                    <p>For a more visual explanation, refer to the infographic below, which was the primary inspiration behind the physics of this demo.</p>
+                    <img class="img-responsive" src="/img/demogreenhouse/diagram3.jpg">
+                    <h1>Technical Information</h1>
+                    <p>In this demo, the Earth has a 30% chance of absorbing both long and shortwave radiation. Only 50 waves are allowed on screen at once, due to technical limitations. Waves are always released from the Earth as longwave radiation.</p>
+                    <p>The atmosphere's chance of trapping/bouncing longwave radiation is determined by the "Greenhouse Gas Density" slider. By default, this value is set to 75%, which roughly keeps the Earth in a state of equilibrium. Shortwave radiation is reflected by the atmosphere 5% of the time, to simulate being bounced off of clouds. </p>
+                    <p>These values are by no means 100% accurate, but roughly demonstrate the underlying mechanics of the Greenhouse Effect.</p>
+                    <p>You may notice that when the demo first starts, the Earth appears to be frozen over. This represents the Earth in a colder, "ice age" like state, using Wm. Robert. Johnston's Ice Age map as a reference. As the earth warms up, the ice melts away, with the Earth eventually channging to reflect NASA's "blue marble" map.</p>
+                    <p>If the Earth continues to warm, it will eventually change to reflect a map of the Earth with about a 100m sea level rise. While this is an extreme amount (and more than is possible with the Earth's current water supply), it is simply in place to provide a visual representation of the warming of the Earth. In a more realistic scenario, the Earth's water levels could only ever rise about 85m, and is expected to rise about 1 - 4 feet by 2100.</p>
+                    <h1>References</h1>
+                    <p>"Flatplanet Maps". Flatplanet. Web. 6 May 2017.</p>
+                    <p>"Looking For A Post Apocalyptic Map?". Alternate History Discussion. N.p., 2009. Web. 6 May 2017.</p>
+                    <p>"Sea Level Rise". GlobalChange.gov. Web. 6 May 2017.</p>
+                    <p>"The Blue Marble: Land Surface, Ocean Color And Sea Ice". Visible Earth. N.p., 2002. Web. 6 May 2017.</p>
+                    <br>
                 </div>
             </div>
         </div>
@@ -35,7 +68,7 @@
 
     <!--include scripts-->
 
-    <script src="../../js/demogreenhouse/main.js"></script>
+    <script src="/js/demogreenhouse/main.js"></script>
 </body>
 
 </html>

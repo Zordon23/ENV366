@@ -38,9 +38,8 @@ module.exports = function(grunt) {
     config.replace = {};
     config.replace.www = {
         expand: true,
-        //cwd: WWW_SRC + "pages/",
         src: [WWW_SRC + "pages/*.html"],
-        dest: WWW_TMP + "pages/",
+        dest: WWW_TMP,
         replacements: [{
             from: "<!--include head-->",
             to: fs.readFileSync(WWW_SRC + "templates/head.html", "utf8")
@@ -75,14 +74,9 @@ module.exports = function(grunt) {
         },
         files: [{
             "expand": true,
-            "cwd": WWW_SRC,
-            "src": "index.html",
-            "dest": WWW_BUILD
-        }, {
-            "expand": true,
-            "cwd": WWW_TMP + "pages/",
+            "cwd": WWW_TMP,
             "src": ["**/*.html"],
-            "dest": WWW_BUILD + "pages/",
+            "dest": WWW_BUILD,
             "ext": ".html"
         }]
     };
