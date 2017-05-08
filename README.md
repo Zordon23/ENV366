@@ -26,6 +26,6 @@ After building, open a command prompt and run the following:
   cd %HOMEPATH%/Desktop/ENV366/build/www
   serve
 ```
-A message will appear telling you that a web serve has been created on a certain port (usually 5000). Open the URL provided in your browser to preview the site.
+A message will appear telling you that a web server has been created on a certain port (usually 5000). Open the URL provided in your browser to preview the site.
 
 The web server does not need to be restarted between builds.
