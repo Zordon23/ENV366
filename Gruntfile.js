@@ -131,6 +131,11 @@ module.exports = function(grunt) {
             cwd: WWW_SRC + 'fonts/',
             src: '**/*',
             dest: WWW_BUILD + "fonts/"
+        }, {
+            expand: true,
+            cwd: WWW_SRC + 'favicon/',
+            src: '**/*',
+            dest: WWW_BUILD + "favicon/"
         }]
     };
 
