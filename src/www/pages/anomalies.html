@@ -15,7 +15,7 @@
                 <h1>What are Anomalies?</h1>
                 <p>An anomaly, while having a seemingly complex and negative name, simply means a value’s difference from the average in a set of data.</p>
                 <p>For example, let’s say we have the following set of numbers:</p>
-                <pre><code>{ 2, 9, 1, 5, 5, 8 ,9 }</code></pre>
+                <pre><code>{ 1, 4, 3, 5, 5, 8, 9 }</code></pre>
                 <p>From this set, we can extract a few statistics:</p>
                 <pre><code>Mode (Most often occurring number) = 9
 Median (Number in the center of the data) = 5
@@ -30,124 +30,134 @@ Mean (Average of all data) = (Sum of all numbers) / (How many numbers are in the
     = 4</code></pre>
                 <h1>Why is this Useful?</h1>
                 <h3>(+ An Explanation of Sensors)</h3>
-                <p>In any modern data collection scenario, it is crucial to use sensors to assign numeric values to things we wish to observe to achieve the highest accuracy and precision possible. Things like wind speed, pressure, temperature, humidity, etc. all require sensors to conduct mass, continuous measurements. However, due to the relative nature of these sensors, even measurements of the same exact thing with different sensors can yield differing results.</p>
+                <p>In any modern data collection scenario, it is crucial to use sensors to assign numeric values to things we wish to observe to achieve the highest accuracy and precision possible. Things like wind speed, pressure, temperature, humidity,
+                    etc. all require sensors to conduct mass, continuous measurements. However, due to the relative nature of these sensors, even measurements of the same exact thing with different sensors can yield differing results.</p>
                 <p>For example, let’s say two people measure the temperature (in Fahrenheit) of a cup of water over a period of 10 minutes using two different sensors, and get the following values:</p>
-                <div class="table-responsive"><table class="table table-striped">
-                    <caption>Temperature Values over Time</caption>
-                    <tr>
-                        <td><b>Time (Min</b>)</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>7</td>
-                        <td>8</td>
-                        <td>9</td>
-                        <td>10</td>
-                    </tr>
-                    <tr>
-                        <td><b>Sensor 1 (F</b>)</td>
-                        <td>74.3</td>
-                        <td>74.1</td>
-                        <td>73.5</td>
-                        <td>73.9</td>
-                        <td>74.7</td>
-                        <td>75.5</td>
-                        <td>76.1</td>
-                        <td>76.3</td>
-                        <td>76.7</td>
-                        <td>76.5</td>
-                    </tr>
-                    <tr>
-                        <td><b>Sensor 2 (F</b>)</td>
-                        <td>75</td>
-                        <td>74.8</td>
-                        <td>74.2</td>
-                        <td>74.6</td>
-                        <td>75.4</td>
-                        <td>76.2</td>
-                        <td>76.8</td>
-                        <td>77</td>
-                        <td>77.4</td>
-                        <td>77.2</td>
-                    </tr>
-                </table></div>
-                <p>Despite the fact that the two people were measuring the exact same cup of water, the values are completely different! So, how can we normalize this data in order to compare the trends in each of the measurements? By taking the anomalies of each.</p>
-                <div class="table-responsive"><table class="table table-striped">
-                    <caption>Temperature Values over Time</caption>
-                    <tr>
-                        <td><b>Time (Min</b>)</td>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>7</td>
-                        <td>8</td>
-                        <td>9</td>
-                        <td>10</td>
-                        <td><b>Averages</b></td>
-                    </tr><tr>
-                        <td><b>Sensor 1 (F</b>)</td>
-                        <td>74.3</td>
-                        <td>74.1</td>
-                        <td>73.5</td>
-                        <td>73.9</td>
-                        <td>74.7</td>
-                        <td>75.5</td>
-                        <td>76.1</td>
-                        <td>76.3</td>
-                        <td>76.7</td>
-                        <td>76.5</td>
-                        <td>75.16</td>
-                    </tr><tr>
-                        <td><b>Sensor 2 (F</b>)</td>
-                        <td>75</td>
-                        <td>74.8</td>
-                        <td>74.2</td>
-                        <td>74.6</td>
-                        <td>75.4</td>
-                        <td>76.2</td>
-                        <td>76.8</td>
-                        <td>77</td>
-                        <td>77.4</td>
-                        <td>77.2</td>
-                        <td>75.86</td>
-                    </tr><tr>
-                        <td><b>Sensor 1 Anomalies</b></td>
-                        <td>0.9886</td>
-                        <td>0.9859</td>
-                        <td>0.9779</td>
-                        <td>0.9832</td>
-                        <td>0.9939</td>
-                        <td>1.0045</td>
-                        <td>1.0125</td>
-                        <td>1.0152</td>
-                        <td>1.0205</td>
-                        <td>1.0178</td>
-                        <td>1</td>
-                    </tr><tr>
-                        <td><b>Sensor 2 Anomalies</b></td>
-                        <td>0.9887</td>
-                        <td>0.9860</td>
-                        <td>0.9781</td>
-                        <td>0.9834</td>
-                        <td>0.9939</td>
-                        <td>1.0045</td>
-                        <td>1.0124</td>
-                        <td>1.0150</td>
-                        <td>1.0203</td>
-                        <td>1.0177</td>
-                        <td>1</td>
-                    </tr>
-                </table></div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <caption>Temperature Values over Time</caption>
+                        <tr>
+                            <td><b>Time (Min</b>)</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>7</td>
+                            <td>8</td>
+                            <td>9</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td><b>Sensor 1 (F</b>)</td>
+                            <td>74.3</td>
+                            <td>74.1</td>
+                            <td>73.5</td>
+                            <td>73.9</td>
+                            <td>74.7</td>
+                            <td>75.5</td>
+                            <td>76.1</td>
+                            <td>76.3</td>
+                            <td>76.7</td>
+                            <td>76.5</td>
+                        </tr>
+                        <tr>
+                            <td><b>Sensor 2 (F</b>)</td>
+                            <td>75</td>
+                            <td>74.8</td>
+                            <td>74.2</td>
+                            <td>74.6</td>
+                            <td>75.4</td>
+                            <td>76.2</td>
+                            <td>76.8</td>
+                            <td>77</td>
+                            <td>77.4</td>
+                            <td>77.2</td>
+                        </tr>
+                    </table>
+                </div>
+                <p>Despite the fact that the two people were measuring the exact same cup of water, the values are completely different! So, how can we normalize this data in order to compare the trends in each of the measurements? By taking the anomalies
+                    of each.</p>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <caption>Temperature Values over Time</caption>
+                        <tr>
+                            <td><b>Time (Min</b>)</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>7</td>
+                            <td>8</td>
+                            <td>9</td>
+                            <td>10</td>
+                            <td><b>Averages</b></td>
+                        </tr>
+                        <tr>
+                            <td><b>Sensor 1 (F</b>)</td>
+                            <td>74.3</td>
+                            <td>74.1</td>
+                            <td>73.5</td>
+                            <td>73.9</td>
+                            <td>74.7</td>
+                            <td>75.5</td>
+                            <td>76.1</td>
+                            <td>76.3</td>
+                            <td>76.7</td>
+                            <td>76.5</td>
+                            <td>75.16</td>
+                        </tr>
+                        <tr>
+                            <td><b>Sensor 2 (F</b>)</td>
+                            <td>75</td>
+                            <td>74.8</td>
+                            <td>74.2</td>
+                            <td>74.6</td>
+                            <td>75.4</td>
+                            <td>76.2</td>
+                            <td>76.8</td>
+                            <td>77</td>
+                            <td>77.4</td>
+                            <td>77.2</td>
+                            <td>75.86</td>
+                        </tr>
+                        <tr>
+                            <td><b>Sensor 1 Anomalies</b></td>
+                            <td>0.9886</td>
+                            <td>0.9859</td>
+                            <td>0.9779</td>
+                            <td>0.9832</td>
+                            <td>0.9939</td>
+                            <td>1.0045</td>
+                            <td>1.0125</td>
+                            <td>1.0152</td>
+                            <td>1.0205</td>
+                            <td>1.0178</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td><b>Sensor 2 Anomalies</b></td>
+                            <td>0.9887</td>
+                            <td>0.9860</td>
+                            <td>0.9781</td>
+                            <td>0.9834</td>
+                            <td>0.9939</td>
+                            <td>1.0045</td>
+                            <td>1.0124</td>
+                            <td>1.0150</td>
+                            <td>1.0203</td>
+                            <td>1.0177</td>
+                            <td>1</td>
+                        </tr>
+                    </table>
+                </div>
                 <p>Graphing this data, we can see that two line up almost perfectly.</p>
                 <img class="img-responsive" src="/img/anomalies/anomaliesvtime.png">
             </div>
-            
+
             <!--include sidebar_normal-->
 
         </div>
